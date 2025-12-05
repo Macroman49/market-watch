@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Market Tracker & Learning Hub</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --success-color: #27ae60;
+            --danger-color: #c0392b;
+            --bg-light: #f4f6f7;
+            --text-dark: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        
+        header h1 { margin: 0; font-size: 2.5rem; }
+        header p { margin-top: 5px; opacity: 0.8; }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Section Titles */
+        h2 {
+            border-bottom: 3px solid var(--accent-color);
+            display: inline-block;
+            padding-bottom: 5px;
+            margin-top: 40px;
+            color: var(--primary-color);
+        }
+
+        /* Market Cards (Flexbox) */
+        .market-dashboard {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 250px;
+            text-align: center;
+            border-top: 5px solid var(--accent-color);
+        }
+
+        .card h3 { margin: 0 0 10px 0; color: #555; }
+        .price { font-size: 2rem; font-weight: bold; }
+        .change { font-size: 1.2rem; margin-top: 5px; }
+        .positive { color: var(--success-color); }
+        .negative { color: var(--danger-color); }
+
+        /* Terminology Glossary (Grid) */
+        .glossary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .term-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid var(--success-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .term-card:hover { transform: translateY(-5px); }
+        .term-card h4 { margin-top: 0; color: var(--primary-color); font-size: 1.2rem; }
+        .term-card p { font-size: 0.95rem; line-height: 1.5; color: #666; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            margin-top: 50px;
+        }
+
+        /* Simple Tab System */
+        .tabs { margin-top: 20px; text-align: center; }
+        .tab-btn {
+            padding: 10px 20px;
+            cursor: pointer;
+            background: #ddd;
+            border: none;
+            font-size: 1rem;
+            margin: 0 5px;
+        }
+        .tab-btn.active { background: var(--accent-color); color: white; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🇮🇳 India Market Watch</h1>
+    <p>Your Daily Dose of Nifty, Sensex & Market Knowledge</p>
+</header>
+
+<div class="container">
+    
+    <h2>Market Snapshot (Real-Time Estimates)</h2>
+<button onclick="fetchMarketData()" style="padding: 10px 20px; background: #3498db; color: white; border: none; cursor: pointer; border-radius: 5px;">
+    🔄 Refresh Prices
+</button>
+    <div class="market-dashboard">
+        <div class="card">
+            <h3>NIFTY 50</h3>
+            <div class="price">23,741.10</div>
+            <div class="change positive">▲ +24.80 (0.10%)</div>
+            <small>NSE India</small>
+        </div>
+
+        <div class="card">
+            <h3>BSE SENSEX</h3>
+            <div class="price">85,642.80</div>
+            <div class="change positive">▲ +377.48 (0.44%)</div>
+            <small>BSE India</small>
+        </div>
+
+        <div class="card">
+            <h3>BANK NIFTY</h3>
+            <div class="price">59,606.00</div>
+            <div class="change positive">▲ +317.30 (0.54%)</div>
+            <small>Banking Sector</small>
+        </div>
+    </div>
+    <p style="text-align:center; color:#777; font-size:0.9rem;">*Data shown is for design demonstration. For live API integration, see developer notes.</p>
+
+    <h2>Stock Market Dictionary</h2>
+<div class="tabs">
+    <button class="tab-btn active" onclick="filterTerms('all')">All</button>
+    <button class="tab-btn" onclick="filterTerms('basics')">Basics</button>
+    <button class="tab-btn" onclick="filterTerms('trading')">Trading</button>
+</div>
+
+<div style="text-align: center; margin: 20px 0;">
+    <input type="text" 
+           id="searchInput" 
+           placeholder="🔎 Search for a term (e.g., IPO, Bear)..." 
+           onkeyup="searchTerms()" 
+           style="padding: 12px; width: 80%; max-width: 400px; border: 1px solid #ccc; border-radius: 25px; font-size: 1rem; outline: none;">
+</div>
+
+    <div class="glossary-grid" id="glossaryContainer">
+        </div>
+
+</div>
+
+<footer>
+    <p>© 2025 India Market Watch | Educational Purpose Only</p>
+</footer>
+
+<script>
+    // 1. YOUR KEY (From your screenshot)
+    const API_KEY = '08749ab528msh0588036cff901aep1cbb48jsn3ce1496719b7'; 
+    
+    // 2. THE HOST (Matches your screenshot)
+    const API_HOST = 'apidojo-yahoo-finance-v1.p.rapidapi.com'; 
+
+    // 3. SYMBOLS
+    const symbols = ['^NSEI', '^BSESN'];
+
+    async function fetchMarketData() {
+        const dashboard = document.querySelector('.market-dashboard');
+        dashboard.innerHTML = '<p style="text-align:center;">Connecting to API Dojo...</p>';
+
+        try {
+            // FIX: Use the specific endpoint that works for the 'apidojo' host
+            const url = `https://${API_HOST}/market/v2/get-quotes?region=IN&symbols=${symbols.join(',')}`;
+
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': API_KEY,
+                    'X-RapidAPI-Host': API_HOST
+                }
+            });
+
+            if (!response.ok) {
+                const text = await response.text(); 
+                throw new Error(`Server Error ${response.status}: ${text}`);
+            }
+
+            const data = await response.json();
+            
+            // The data structure is usually the same (quoteResponse.result)
+            const results = data.quoteResponse?.result || [];
+
+            if (results.length === 0) {
+                throw new Error("Connected, but no stock data found.");
+            }
+
+            dashboard.innerHTML = '';
+
+            results.forEach(stock => {
+                const isPositive = stock.regularMarketChange >= 0;
+                const colorClass = isPositive ? 'positive' : 'negative';
+                const arrow = isPositive ? '▲' : '▼';
+                
+                dashboard.innerHTML += `
+                    <div class="card">
+                        <h3>${stock.symbol === '^NSEI' ? 'NIFTY 50' : 'SENSEX'}</h3>
+                        <div class="price">₹${stock.regularMarketPrice.toLocaleString()}</div>
+                        <div class="change ${colorClass}">
+                            ${arrow} ${stock.regularMarketChange.toFixed(2)} (${stock.regularMarketChangePercent.toFixed(2)}%)
+                        </div>
+                        <small>${stock.symbol}</small>
+                    </div>
+                `;
+            });
+
+        } catch (error) {
+            console.error(error);
+            dashboard.innerHTML = `
+                <div style="color: #c0392b; text-align: center; background: #fadbd8; padding: 20px; border-radius: 8px;">
+                    <strong>⚠️ Error</strong><br>
+                    ${error.message}
+                </div>`;
+        }
+    }
+
+    fetchMarketData();
+
+    // --- GLOSSARY CODE ---
+    const terms = [
+        { title: "Bull Market", category: "basics", desc: "A market condition where share prices are rising." },
+        { title: "Bear Market", category: "basics", desc: "A market condition where share prices are falling." },
+        { title: "Nifty 50", category: "basics", desc: "The benchmark index of the NSE." }
+    ];
+    const glossaryContainer = document.getElementById('glossaryContainer');
+    if(glossaryContainer) {
+        glossaryContainer.innerHTML = '';
+        terms.forEach(term => {
+            glossaryContainer.innerHTML += `<div class="term-card"><h4>${term.title}</h4><p>${term.desc}</p></div>`;
+        });
+    }
+function searchTerms() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toLowerCase();
+        const container = document.getElementById('glossaryContainer');
+        
+        container.innerHTML = ''; // Clear current cards
+
+        // Filter the terms list
+        const filteredTerms = terms.filter(term => {
+            // Check if the Title OR the Description contains the text
+            return term.title.toLowerCase().includes(filter) || 
+                   term.desc.toLowerCase().includes(filter);
+        });
+
+        // Show the filtered cards
+        if (filteredTerms.length > 0) {
+            filteredTerms.forEach(term => {
+                container.innerHTML += `
+                    <div class="term-card">
+                        <h4>${term.title}</h4>
+                        <p>${term.desc}</p>
+                    </div>`;
+            });
+        } else {
+            // If no results match
+            container.innerHTML = `<p style="text-align:center; color:#777;">No terms found matching "${input.value}"</p>`;
+        }
+    }
+</script>
+</body>
+</html>
